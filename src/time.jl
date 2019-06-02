@@ -573,6 +573,11 @@ function gast(epc::Epoch; use_degrees::Bool=false)
     return use_degrees ? gast*180.0/pi : gast
 end
 
+# Hash function
+function Base.hash(epc::Epoch, h::UInt)
+    return hash(epc.days, hash(epc.seconds, hash(epc.nanoseconds, hash(epc.tsys, hash(:Epoch, h)))))
+end
+
 # Comparison operators
 function Base.:(==)(epc_left::Epoch, epc_right::Epoch)
     return ((epc_left.days == epc_right.days) &&
@@ -739,4 +744,4 @@ function time_system_offset(epc::Epoch, tsys_src::Symbol, tsys_dest::Symbol)
     return time_system_offset(jd, fd, tsys_src, tsys_dest)
 end
 
-end
+end # Time
